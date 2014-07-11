@@ -63,7 +63,7 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 		root = "ocpu"
 	}
 	sess.host.Path = pth.Join(sess.host.Path, root)
-	sess.root = filepath.Join("/", root)
+	sess.root = pth.Join("/", root)
 	sess.control, err = sess.cmd.StdinPipe()
 	if err != nil {
 		panic(err)
@@ -120,7 +120,7 @@ func NewRemoteSession(host, root string, timeout time.Duration) (*Session, error
 		root = "ocpu"
 	}
 	sess.host.Path = pth.Join(sess.host.Path, root)
-	sess.root = filepath.Join("/", root)
+	sess.root = pth.Join("/", root)
 
 	start := time.Now()
 	u := sess.host.String()
