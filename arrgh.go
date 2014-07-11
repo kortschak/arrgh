@@ -151,10 +151,10 @@ func (s *Session) Post(path, content string, query io.Reader) (*http.Response, e
 	return http.Post(u.String(), content, query)
 }
 
-// Get sends the query to the given OpenCPU path using the GET method.
+// Get retrieves the given OpenCPU path using the GET method.
 //
 // See https://www.opencpu.org/api.html#api-methods for details.
-func (s *Session) Get(path, query string) (*http.Response, error) {
+func (s *Session) Get(path string) (*http.Response, error) {
 	if s.host == nil {
 		return nil, errors.New("arrgh: GET on closed session")
 	}
