@@ -5,11 +5,13 @@
 package arrgh_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -40,6 +42,13 @@ func Example_1() {
 	fmt.Println(rnorm, err)
 }
 
+func anon(r io.Reader) io.Reader {
+	re := regexp.MustCompile("x[0-9a-f]{10}")
+	var buf bytes.Buffer
+	io.Copy(&buf, r)
+	return bytes.NewReader(re.ReplaceAll(buf.Bytes(), []byte("xXXXXXXXXXX")))
+}
+
 func Example_2() {
 	r, err := arrgh.NewRemoteSession("http://public.opencpu.org", 10*time.Second)
 	if err != nil {
@@ -62,5 +71,14 @@ func Example_2() {
 	}
 	defer resp.Body.Close()
 
-	io.Copy(os.Stdout, resp.Body)
+	io.Copy(os.Stdout, anon(resp.Body))
+
+	// Output:
+	//
+	// /ocpu/tmp/xXXXXXXXXXX/R/.val
+	// /ocpu/tmp/xXXXXXXXXXX/stdout
+	// /ocpu/tmp/xXXXXXXXXXX/source
+	// /ocpu/tmp/xXXXXXXXXXX/console
+	// /ocpu/tmp/xXXXXXXXXXX/info
+	// /ocpu/tmp/xXXXXXXXXXX/files/mydata.csv
 }
