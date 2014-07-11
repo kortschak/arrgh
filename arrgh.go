@@ -28,19 +28,21 @@ type Session struct {
 	cmd     *exec.Cmd
 	host    *url.URL
 	control io.Writer
+	root    string
 }
 
 // NewLocalSession starts an R instance using the executable in the given
 // path or the executable "R" in the user's $PATH if path is empty. An OpenCPU
 // server is started using the provided port and connection is tested before
 // returning if no connection is possible within the timeout, a nil session and
-// an error are returned.
+// an error are returned. The root of the OpenCPU API is set to "/ocpu" if it is
+// left empty.
 //
 // It is important that Close() be called on sessions returned by NewLocalSession.
-func NewLocalSession(path string, port int, timeout time.Duration) (*Session, error) {
+func NewLocalSession(path, root string, port int, timeout time.Duration) (*Session, error) {
 	var (
-		err  error
 		sess Session
+		err  error
 	)
 
 	if path == "" {
@@ -53,10 +55,15 @@ func NewLocalSession(path string, port int, timeout time.Duration) (*Session, er
 		}
 	}
 	sess.cmd = exec.Command(path, "--vanilla", "--slave")
-	sess.host, err = url.Parse(fmt.Sprintf("http://localhost:%d/ocpu/", port))
+	sess.host, err = url.Parse(fmt.Sprintf("http://localhost:%d/", port))
 	if err != nil {
 		panic(fmt.Sprintf("arrgh: unexpected error: %v", err))
 	}
+	if root == "" {
+		root = "ocpu"
+	}
+	sess.host.Path = pth.Join(sess.host.Path, root)
+	sess.root = filepath.Join("/", root)
 	sess.control, err = sess.cmd.StdinPipe()
 	if err != nil {
 		panic(err)
@@ -70,9 +77,10 @@ func NewLocalSession(path string, port int, timeout time.Duration) (*Session, er
 	runtime.SetFinalizer(&sess, func(s *Session) { s.Close() })
 
 	start := time.Now()
+	u := sess.host.String()
 	for {
 		time.Sleep(time.Second)
-		_, err := http.Get(sess.host.String())
+		_, err := http.Get(u)
 		if err == nil {
 			return &sess, nil
 		} else if timeout > 0 && time.Now().Sub(start) > timeout {
@@ -82,8 +90,11 @@ func NewLocalSession(path string, port int, timeout time.Duration) (*Session, er
 	}
 }
 
+// Root returns the OpenCPU root path.
+func (s *Session) Root() string { return s.root }
+
 // Close shuts down a running local session, terminating the OpenCPU server
-// and the R session.
+// and the R session. It is a no-op on a remote session.
 func (s *Session) Close() error {
 	if s.cmd == nil || s.host == nil {
 		return nil
@@ -94,8 +105,9 @@ func (s *Session) Close() error {
 	return s.cmd.Wait()
 }
 
-// NewRemoteSession connects to the OpenCPU server at the specified host.
-func NewRemoteSession(host string, timeout time.Duration) (*Session, error) {
+// NewRemoteSession connects to the OpenCPU server at the specified host. The
+// root of the OpenCPU API is set to "/ocpu" if it is left empty.
+func NewRemoteSession(host, root string, timeout time.Duration) (*Session, error) {
 	var (
 		sess Session
 		err  error
@@ -104,12 +116,17 @@ func NewRemoteSession(host string, timeout time.Duration) (*Session, error) {
 	if err != nil {
 		return nil, err
 	}
-	sess.host.Path = pth.Join(sess.host.Path, "ocpu")
+	if root == "" {
+		root = "ocpu"
+	}
+	sess.host.Path = pth.Join(sess.host.Path, root)
+	sess.root = filepath.Join("/", root)
 
 	start := time.Now()
+	u := sess.host.String()
 	for {
 		time.Sleep(time.Second)
-		_, err := http.Get(sess.host.String())
+		_, err := http.Get(u)
 		if err == nil {
 			return &sess, nil
 		} else if timeout > 0 && time.Now().Sub(start) > timeout {
@@ -129,7 +146,7 @@ func (s *Session) Post(path, content string, query io.Reader) (*http.Response, e
 	if s.host == nil {
 		return nil, errors.New("arrgh: POST on closed session")
 	}
-	u := s.host
+	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
 	return http.Post(u.String(), content, query)
 }
@@ -141,7 +158,7 @@ func (s *Session) Get(path, query string) (*http.Response, error) {
 	if s.host == nil {
 		return nil, errors.New("arrgh: GET on closed session")
 	}
-	u := s.host
+	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
 	return http.Get(u.String())
 }
@@ -166,7 +183,7 @@ func (s *Session) PostMultipart(path string, p Params, f Files) (*http.Response,
 	if s.host == nil {
 		return nil, errors.New("arrgh: POST on closed session")
 	}
-	u := s.host
+	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
 	return multi(u.String(), p, f)
 }

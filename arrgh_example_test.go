@@ -19,7 +19,7 @@ import (
 )
 
 func Example_1() {
-	r, err := arrgh.NewLocalSession("", 3000, 10*time.Second)
+	r, err := arrgh.NewLocalSession("", "", 3000, 10*time.Second)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func anon(r io.Reader) io.Reader {
 }
 
 func Example_2() {
-	r, err := arrgh.NewRemoteSession("http://public.opencpu.org", 10*time.Second)
+	r, err := arrgh.NewRemoteSession("http://public.opencpu.org", "", 10*time.Second)
 	if err != nil {
 		log.Fatal(err)
 	}
