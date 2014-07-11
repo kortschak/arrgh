@@ -154,12 +154,13 @@ func (s *Session) Post(path, content string, query io.Reader) (*http.Response, e
 // Get retrieves the given OpenCPU path using the GET method.
 //
 // See https://www.opencpu.org/api.html#api-methods for details.
-func (s *Session) Get(path string) (*http.Response, error) {
+func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
 	if s.host == nil {
 		return nil, errors.New("arrgh: GET on closed session")
 	}
 	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
+	u.RawQuery = params.Encode()
 	return http.Get(u.String())
 }
 

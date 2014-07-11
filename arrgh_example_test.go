@@ -11,7 +11,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -80,7 +82,7 @@ func Example_2() {
 		}
 		fmt.Printf("%s:\n", p)
 
-		resp, err := r.Get(p)
+		resp, err := r.Get(p, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -90,7 +92,7 @@ func Example_2() {
 	}
 
 	// Get the linear regression result as JSON.
-	res, err := r.Get(filepath.Join(val, "json"))
+	res, err := r.Get(path.Join(val, "json"), url.Values{"digits": []string{"10"}})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,7 +106,7 @@ func Example_2() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("lm: intercept=%.2f dist=%.2f\n", lm[0], lm[1])
+	fmt.Printf("lm: intercept=%f dist=%f\n", lm[0], lm[1])
 }
 
 func mask(r io.Reader) io.Reader {
