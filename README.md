@@ -1,4 +1,4 @@
-arrgh (Pronunciation: /ɑː/) is an interface to the [OpenCPU](https://www.opencpu.org/) R server system.
+arrgh (Pronunciation: /ɑː/ or /är/) is an interface to the [OpenCPU](https://www.opencpu.org/) R server system.
 
 # Installation
 
