@@ -5,6 +5,8 @@
 // Package arrgh provides an interface to R via an OpenCPU server.
 //
 // Interaction with the OpenCPU system is via the OpenCPU API https://www.opencpu.org/api.html.
+// Data serialisation at the R end is performed by jsonlite::toJSON, see
+// http://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf for the jsonlite manual.
 package arrgh
 
 import (
@@ -140,6 +142,7 @@ func NewRemoteSession(host, root string, timeout time.Duration) (*Session, error
 
 // Post sends the query content to the given OpenCPU path as the specified content
 // type using the POST method. The params parameter specifies additional POST parameters.
+// These parameters are interpreted by jsonlite::toJSON.
 //
 // See https://www.opencpu.org/api.html#api-methods and https://www.opencpu.org/api.html#api-arguments for details.
 func (s *Session) Post(path, content string, params url.Values, query io.Reader) (*http.Response, error) {
@@ -153,7 +156,7 @@ func (s *Session) Post(path, content string, params url.Values, query io.Reader)
 }
 
 // Get retrieves the given OpenCPU path using the GET method. The params parameter specifies
-// GET parameters.
+// GET parameters which are interpreted by jsonlite::toJSON.
 //
 // See https://www.opencpu.org/api.html#api-methods for details.
 func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
@@ -179,7 +182,8 @@ type NamedReader interface {
 type Files map[string]NamedReader
 
 // PostMultipart sends the Params and Files content to the given OpenCPU path as the "multipart/form-data"
-// content type using the POST method. The params parameter specifies additional POST parameters.
+// content type using the POST method. The params parameter specifies additional POST parameters to be
+// interpreted by jsonlite::toJSON.
 //
 // See https://www.opencpu.org/api.html#api-methods and https://www.opencpu.org/api.html#api-arguments for details.
 func (s *Session) PostMultipart(path string, params url.Values, p Params, f Files) (*http.Response, error) {
