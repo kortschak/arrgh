@@ -34,6 +34,7 @@ func Example_1() {
 	resp, err := r.Post(
 		"library/stats/R/rnorm/json",
 		"application/json",
+		url.Values{"digits": []string{"10"}},
 		strings.NewReader(`{"n":10, "mean": 10, "sd":10}`),
 	)
 	if err != nil {
@@ -61,6 +62,7 @@ func Example_2() {
 	resp, err := r.Post(
 		"library/base/R/identity",
 		"application/x-www-form-urlencoded",
+		nil,
 		strings.NewReader(`x=coef(lm(speed ~ dist, data = cars))`),
 	)
 	if err != nil {
@@ -132,6 +134,7 @@ func Example_3() {
 	resp, err := r.PostMultipart(
 		"library/utils/R/read.csv",
 		nil,
+		arrgh.Params{"header": "F"},
 		arrgh.Files{"file": f},
 	)
 	f.Close()

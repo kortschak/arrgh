@@ -139,19 +139,21 @@ func NewRemoteSession(host, root string, timeout time.Duration) (*Session, error
 }
 
 // Post sends the query content to the given OpenCPU path as the specified content
-// type using the POST method.
+// type using the POST method. The params parameter specifies additional POST parameters.
 //
 // See https://www.opencpu.org/api.html#api-methods and https://www.opencpu.org/api.html#api-arguments for details.
-func (s *Session) Post(path, content string, query io.Reader) (*http.Response, error) {
+func (s *Session) Post(path, content string, params url.Values, query io.Reader) (*http.Response, error) {
 	if s.host == nil {
 		return nil, errors.New("arrgh: POST on closed session")
 	}
 	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
+	u.RawQuery = params.Encode()
 	return http.Post(u.String(), content, query)
 }
 
-// Get retrieves the given OpenCPU path using the GET method.
+// Get retrieves the given OpenCPU path using the GET method. The params parameter specifies
+// GET parameters.
 //
 // See https://www.opencpu.org/api.html#api-methods for details.
 func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
@@ -176,16 +178,17 @@ type NamedReader interface {
 // Params is a collection of parameter names and file objects to be passed using PostMultipart.
 type Files map[string]NamedReader
 
-// PostMultipart send the query content to the given OpenCPU path as the "multipart/form-data"
-// content type using the POST method.
+// PostMultipart sends the Params and Files content to the given OpenCPU path as the "multipart/form-data"
+// content type using the POST method. The params parameter specifies additional POST parameters.
 //
 // See https://www.opencpu.org/api.html#api-methods and https://www.opencpu.org/api.html#api-arguments for details.
-func (s *Session) PostMultipart(path string, p Params, f Files) (*http.Response, error) {
+func (s *Session) PostMultipart(path string, params url.Values, p Params, f Files) (*http.Response, error) {
 	if s.host == nil {
 		return nil, errors.New("arrgh: POST on closed session")
 	}
 	u := *s.host
 	u.Path = pth.Join(s.host.Path, path)
+	u.RawQuery = params.Encode()
 	return multi(u.String(), p, f)
 }
 
