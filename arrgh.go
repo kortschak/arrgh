@@ -50,11 +50,9 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 	if path == "" {
 		path = "R"
 	}
-	if filepath.Base(path) == path {
-		path, err = exec.LookPath(path)
-		if err != nil {
-			return nil, err
-		}
+	path, err = exec.LookPath(path)
+	if err != nil {
+		return nil, err
 	}
 	sess.cmd = exec.Command(path, "--vanilla", "--slave")
 	sess.host, err = url.Parse(fmt.Sprintf("http://localhost:%d/", port))
