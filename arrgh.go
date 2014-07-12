@@ -180,7 +180,7 @@ type NamedReader interface {
 type Files map[string]NamedReader
 
 // Multipart constructs a MIME multipart body and associated content type from the
-// provided parameters and file.
+// provided parameters and files.
 func Multipart(parameters Params, files Files) (content string, body io.Reader, err error) {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
