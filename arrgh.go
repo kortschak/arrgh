@@ -170,7 +170,7 @@ func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
 // Params is a collection of parameter names and values to be passed using Multipart.
 type Params map[string]string
 
-// NamedReader allows a io.Reader to be passed as named data file objects.
+// NamedReader allows an io.Reader to be passed as named data file objects.
 type NamedReader interface {
 	io.Reader
 	Name() string
