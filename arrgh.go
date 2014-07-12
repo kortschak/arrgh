@@ -167,7 +167,7 @@ func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
 	return http.Get(u.String())
 }
 
-// Params is a collection of parameter names and values to be passed using PostMultipart.
+// Params is a collection of parameter names and values to be passed using Multipart.
 type Params map[string]string
 
 // NamedReader allows a io.Reader to be passed as named data file objects.
@@ -176,50 +176,37 @@ type NamedReader interface {
 	Name() string
 }
 
-// Params is a collection of parameter names and file objects to be passed using PostMultipart.
+// Params is a collection of parameter names and file objects to be passed using Multipart.
 type Files map[string]NamedReader
 
-// PostMultipart sends the Params and Files content to the given OpenCPU path as the "multipart/form-data"
-// content type using the POST method. The URL parameters specify additional POST parameters to be
-// interpreted by jsonlite.
-//
-// See https://www.opencpu.org/api.html#api-methods and https://www.opencpu.org/api.html#api-arguments for details.
-func (s *Session) PostMultipart(path string, params url.Values, p Params, f Files) (*http.Response, error) {
-	if s.host == nil {
-		return nil, errors.New("arrgh: POST on closed session")
-	}
-	u := *s.host
-	u.Path = pth.Join(s.host.Path, path)
-	u.RawQuery = params.Encode()
-	return multi(u.String(), p, f)
-}
-
-func multi(url string, params Params, files Files) (*http.Response, error) {
+// Multipart constructs a MIME multipart body and associated content type from the
+// provided parameters and file.
+func Multipart(parameters Params, files Files) (content string, body io.Reader, err error) {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 
 	for label, f := range files {
 		p, err := w.CreateFormFile(label, filepath.Base(f.Name()))
 		if err != nil {
-			return nil, err
+			return "", nil, err
 		}
 		_, err = io.Copy(p, f)
 		if err != nil {
-			return nil, err
+			return "", nil, err
 		}
 	}
 
-	for k, v := range params {
+	for k, v := range parameters {
 		err := w.WriteField(k, v)
 		if err != nil {
-			return nil, err
+			return "", nil, err
 		}
 	}
 
-	err := w.Close()
+	err = w.Close()
 	if err != nil {
-		return nil, err
+		return "", nil, err
 	}
 
-	return http.Post(url, w.FormDataContentType(), &buf)
+	return w.FormDataContentType(), &buf, nil
 }

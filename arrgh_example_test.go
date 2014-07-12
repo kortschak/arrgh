@@ -67,11 +67,15 @@ func Example_3() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	resp, err := r.PostMultipart(
+	content, body, err := arrgh.Multipart(arrgh.Params{"header": "F"}, arrgh.Files{"file": f})
+	if err != nil {
+		log.Fatal(err)
+	}
+	resp, err := r.Post(
 		"library/utils/R/read.csv",
+		content,
 		nil,
-		arrgh.Params{"header": "F"},
-		arrgh.Files{"file": f},
+		body,
 	)
 	f.Close()
 	if err != nil {
