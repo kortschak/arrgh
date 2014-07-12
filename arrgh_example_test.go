@@ -67,7 +67,11 @@ func Example_3() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	content, body, err := arrgh.Multipart(arrgh.Params{"header": "F"}, arrgh.Files{"file": f})
+	content, body, err := arrgh.Multipart(
+		arrgh.Params{"header": "F"},
+		arrgh.Files{"file": f},
+	)
+	f.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,7 +81,6 @@ func Example_3() {
 		nil,
 		body,
 	)
-	f.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
