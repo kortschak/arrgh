@@ -68,7 +68,7 @@ func Example_3() {
 		log.Fatal(err)
 	}
 	content, body, err := arrgh.Multipart(
-		arrgh.Params{"header": "F"},
+		arrgh.Params{"header": "FALSE"},
 		arrgh.Files{"file": f},
 	)
 	f.Close()
