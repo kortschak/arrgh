@@ -36,7 +36,7 @@ type Session struct {
 // NewLocalSession starts an R instance using the executable in the given
 // path or the executable "R" in the user's $PATH if path is empty. An OpenCPU
 // server is started using the provided port and connection is tested before
-// returning if no connection is possible within the timeout, a nil session and
+// returning. If no connection is possible within the timeout, a nil session and
 // an error are returned. The root of the OpenCPU API is set to "/ocpu" if it is
 // left empty.
 //
@@ -170,7 +170,7 @@ func (s *Session) Get(path string, params url.Values) (*http.Response, error) {
 // Params is a collection of parameter names and values to be passed using Multipart.
 type Params map[string]string
 
-// NamedReader allows an io.Reader to be passed as named data file objects.
+// NamedReader allows an io.Reader to be passed as a named data file object.
 type NamedReader interface {
 	io.Reader
 	Name() string
