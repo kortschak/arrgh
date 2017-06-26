@@ -24,7 +24,7 @@ import (
 	"github.com/kortschak/arrgh"
 )
 
-func Example_2() {
+func Example_linear() {
 	r, err := arrgh.NewRemoteSession("http://public.opencpu.org", "", 10*time.Second)
 	if err != nil {
 		log.Fatal(err)

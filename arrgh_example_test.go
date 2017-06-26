@@ -19,7 +19,7 @@ import (
 	"github.com/kortschak/arrgh"
 )
 
-func Example_1() {
+func Example_local() {
 	r, err := arrgh.NewLocalSession("", "", 3000, 10*time.Second)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +54,7 @@ func mask(r io.Reader) io.Reader {
 	return bytes.NewReader(re.ReplaceAll(buf.Bytes(), []byte("xXXXXXXXXXX")))
 }
 
-func Example_3() {
+func Example_upload() {
 	r, err := arrgh.NewRemoteSession("http://public.opencpu.org", "", 10*time.Second)
 	if err != nil {
 		log.Fatal(err)
@@ -90,10 +90,12 @@ func Example_3() {
 
 	// Output:
 	//
+	// /ocpu/tmp/xXXXXXXXXXX/R/read.csv
 	// /ocpu/tmp/xXXXXXXXXXX/R/.val
 	// /ocpu/tmp/xXXXXXXXXXX/stdout
 	// /ocpu/tmp/xXXXXXXXXXX/source
 	// /ocpu/tmp/xXXXXXXXXXX/console
 	// /ocpu/tmp/xXXXXXXXXXX/info
+	// /ocpu/tmp/xXXXXXXXXXX/files/DESCRIPTION
 	// /ocpu/tmp/xXXXXXXXXXX/files/mydata.csv
 }
