@@ -1,5 +1,7 @@
 arrgh (Pronunciation: /ɑː/ or /är/) is an interface to the [OpenCPU](https://www.opencpu.org/) R server system.
 
+[![Build Status](https://travis-ci.org/kortschak/arrgh.svg?branch=master)](https://travis-ci.org/kortschak/arrgh) [![Coverage Status](https://coveralls.io/repos/kortschak/arrgh/badge.svg?branch=master&service=github)](https://coveralls.io/github/kortschak/arrgh?branch=master) [![GoDoc](https://godoc.org/github.com/kortschak/arrgh?status.svg)](https://godoc.org/github.com/kortschak/arrgh)
+
 ## Installation
 
 arrgh requires a [Go](http://golang.org) installation, and if using a local R instance [OpenCPU](https://www.opencpu.org/download.html) must be installed as an R package.
