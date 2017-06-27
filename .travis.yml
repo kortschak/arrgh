@@ -1,13 +1,24 @@
+sudo: required
+dist: trusty
+group: edge
+
 language: go
 go:
     - 1.6.x
     - 1.7.x
     - 1.8.x
     - tip
+
 install:
     - go get -v golang.org/x/tools/cmd/cover
+    - sudo add-apt-repository -y ppa:opencpu/opencpu-1.6
+    - sudo apt-get update
+    - sudo apt-get upgrade -y
+    - sudo apt-get install -y opencpu-server
+
 script:
     - go test -v -covermode=count -coverprofile=profile.cov
+
 after_success:
     - go get -v github.com/mattn/goveralls
     - export PATH=$PATH:$HOME/gopath/bin
