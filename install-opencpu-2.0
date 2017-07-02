@@ -1,0 +1,5 @@
+sudo R --vanilla <<EOF
+install.packages('opencpu', dependencies=TRUE, repos='http://cran.us.r-project.org')
+q()
+EOF
+

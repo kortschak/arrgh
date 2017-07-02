@@ -15,8 +15,13 @@ install:
     - sudo apt-get update
     - sudo apt-get upgrade -y
     - sudo apt-get install -y opencpu-server
+    - sudo apt-get install libapparmor-dev
+    - curl https://cran.r-project.org/src/contrib/semver_0.2.0.tar.gz -o semver_0.2.0.tar.gz
+    - sudo R CMD INSTALL semver_0.2.0.tar.gz
 
 script:
+    - go test -v
+    - . ./install-opencpu-2.0
     - go test -v -covermode=count -coverprofile=profile.cov
 
 after_success:

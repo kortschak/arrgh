@@ -37,7 +37,7 @@ func Example_linear() {
 		"library/base/R/identity",
 		"application/x-www-form-urlencoded",
 		nil,
-		strings.NewReader(`x=coef(lm(speed ~ dist, data = cars))`),
+		strings.NewReader("x="+url.QueryEscape("coef(lm(speed ~ dist, data = cars))")),
 	)
 	if err != nil {
 		log.Fatal(err)
