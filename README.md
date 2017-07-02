@@ -4,7 +4,7 @@ arrgh (Pronunciation: /ɑː/ or /är/) is an interface to the [OpenCPU](https://
 
 ## Installation
 
-arrgh requires a [Go](http://golang.org) installation, and if using a local R instance [OpenCPU](https://www.opencpu.org/download.html) must be installed as an R package.
+arrgh requires a [Go](http://golang.org) installation, and if using a local R instance [OpenCPU](https://www.opencpu.org/download.html) (tested on v1.6 and v2.0) and [semver](https://cran.r-project.org/web/packages/semver/index.html) must be installed as R packages.
 
 ## Documentation
 

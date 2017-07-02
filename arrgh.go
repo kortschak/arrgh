@@ -27,10 +27,9 @@ import (
 
 // Session holds OpenCPU session connection information.
 type Session struct {
-	cmd     *exec.Cmd
-	host    *url.URL
-	control io.Writer
-	root    string
+	cmd  *exec.Cmd
+	host *url.URL
+	root string
 }
 
 // NewLocalSession starts an R instance using the executable in the given
@@ -64,7 +63,7 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 	}
 	sess.host.Path = pth.Join(sess.host.Path, root)
 	sess.root = pth.Join("/", root)
-	sess.control, err = sess.cmd.StdinPipe()
+	control, err := sess.cmd.StdinPipe()
 	if err != nil {
 		panic(err)
 	}
@@ -72,7 +71,19 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 	if err != nil {
 		return nil, err
 	}
-	fmt.Fprintf(sess.control, "library(opencpu); opencpu$start(%d)\n", port)
+
+	// If people ask why this package has the name it does, just point to this;
+	// a version return function in base returns a type that is not accepted by
+	// a package whose sole purpose is to parse version values.
+	const startServer = `library(opencpu)
+library(semver)
+if (parse_version(as.character(packageVersion("opencpu"))) < "2.0.0") {
+	opencpu$start(%[1]d)
+} else {
+	ocpu_start_server(port=%[1]d)
+}
+`
+	fmt.Fprintf(control, startServer, port)
 
 	runtime.SetFinalizer(&sess, func(s *Session) { s.Close() })
 
@@ -84,7 +95,7 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 		if err == nil {
 			return &sess, nil
 		} else if timeout > 0 && time.Now().Sub(start) > timeout {
-			sess.control.Write([]byte("opencpu$stop()\n"))
+			sess.cmd.Process.Kill()
 			return nil, err
 		}
 	}
@@ -100,9 +111,7 @@ func (s *Session) Close() error {
 		return nil
 	}
 	s.host = nil
-	s.control.Write([]byte("opencpu$stop()\nq()\n"))
-	s.control = nil
-	return s.cmd.Wait()
+	return s.cmd.Process.Kill()
 }
 
 // NewRemoteSession connects to the OpenCPU server at the specified host. The
