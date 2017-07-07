@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "https://orcid.org/0000-0001-8295-2301",
+      "@type": "Person",
+      "email": "dan.kortschak@adelaide.edu.au",
+      "name": "R Daniel Kortschak",
+      "affiliation": "School of Biological Sciences, The University of Adelaide"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/kortschak/arrgh",
+  "datePublished": "2017-07-07",
+  "dateModified": "2017-07-07",
+  "dateCreated": "2017-07-07",
+  "description": "Go interface to the OpenCPU R server system",
+  "keywords": "Go, R, OpenCPU",
+  "license": "BSD",
+  "title": "arrgh",
+  "version": "v1.0.0"
+}
