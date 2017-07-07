@@ -43,7 +43,7 @@ var sessionTests = []struct {
 }
 
 func TestLocalSession(t *testing.T) {
-	r, err := NewLocalSession("", "", 3000, 10*time.Second)
+	r, err := NewLocalSession("", "", 3000, 10*time.Second, nil)
 	if err != nil {
 		t.Fatalf("failed to start local opencpu session: %v", err)
 	}
