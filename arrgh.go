@@ -37,10 +37,10 @@ type Session struct {
 // server is started using the provided port and connection is tested before
 // returning. If no connection is possible within the timeout, a nil session and
 // an error are returned. The root of the OpenCPU API is set to "/ocpu" if it is
-// left empty.
+// left empty. The OpenCPU server's logs are written to log.
 //
 // It is important that Close() be called on sessions returned by NewLocalSession.
-func NewLocalSession(path, root string, port int, timeout time.Duration) (*Session, error) {
+func NewLocalSession(path, root string, port int, timeout time.Duration, log io.Writer) (*Session, error) {
 	var (
 		sess Session
 		err  error
@@ -64,6 +64,8 @@ func NewLocalSession(path, root string, port int, timeout time.Duration) (*Sessi
 	sess.host.Path = pth.Join(sess.host.Path, root)
 	sess.root = pth.Join("/", root)
 	control, err := sess.cmd.StdinPipe()
+	sess.cmd.Stdout = log
+	sess.cmd.Stderr = log
 	if err != nil {
 		panic(err)
 	}

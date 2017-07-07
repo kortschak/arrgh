@@ -20,7 +20,7 @@ import (
 )
 
 func Example_local() {
-	r, err := arrgh.NewLocalSession("", "", 3000, 10*time.Second)
+	r, err := arrgh.NewLocalSession("", "", 3000, 10*time.Second, os.Stderr)
 	if err != nil {
 		log.Fatal(err)
 	}
