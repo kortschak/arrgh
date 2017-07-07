@@ -26,7 +26,7 @@ install:
 
 script:
     - go test -v
-    - . ./install-opencpu-2.0
+    - . .travis/install-opencpu-2.0
     - go test -v -covermode=count -coverprofile=profile.cov
 
 after_success:
