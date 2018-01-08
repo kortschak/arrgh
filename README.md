@@ -6,6 +6,9 @@ arrgh (Pronunciation: /ɑː/ or /är/) is an interface to the [OpenCPU](https://
 
 The arrgh package provides API interfaces to remote or local OpenCPU R servers.
 
+Go is a well established network systems language and has seen increasing use in data science and other fields of scientific software development.
+The arrgh package allows developers to leverage the rich statistical analysis environment available through R that is lacking in the Go ecosystem.
+
 ## Example
 
 ```
