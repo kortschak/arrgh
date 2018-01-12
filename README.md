@@ -167,11 +167,13 @@ lm: intercept=8.283906 dist=0.165568
 
 ## Installation
 
-arrgh requires a [Go](http://golang.org) installation, and if using a local R instance [OpenCPU](https://www.opencpu.org/download.html) (tested on v1.6 and v2.0) and [semver](https://cran.r-project.org/web/packages/semver/index.html) must be installed as R packages.
+arrgh requires a [Go](http://golang.org) installation, and if using a local R instance [OpenCPU](https://www.opencpu.org/download.html) (tested on v1.6 and v2.0) and [semver](https://cran.r-project.org/package=semver) must be installed as R packages.
 
 ```
 go get github.com/kortschak/arrgh
 ```
+
+See the [OpenCPU CRAN page](https://cran.r-project.org/package=opencpu) for a complete description of OpenCPU R and system dependencies and [this page](https://github.com/opencpu/opencpu-server/blob/master/debian/readme.md) for instructions for installing OpenCPU from source.
 
 ## Documentation
 
