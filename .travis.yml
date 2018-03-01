@@ -20,7 +20,7 @@ install:
     - go get -v golang.org/x/tools/cmd/cover
     - sudo add-apt-repository -y ppa:opencpu/opencpu-1.6
     - sudo apt-get update
-    - sudo apt-get upgrade -y
+#    - sudo apt-get upgrade -y # TODO(kortschak) Replace this when travis and canonical start communicating properly.
     - sudo apt-get install -y opencpu-server
     - sudo apt-get install libapparmor-dev
     - curl https://cran.r-project.org/src/contrib/semver_0.2.0.tar.gz -o semver_0.2.0.tar.gz
