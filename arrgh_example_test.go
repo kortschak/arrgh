@@ -48,10 +48,10 @@ func Example_local() {
 }
 
 func mask(r io.Reader) io.Reader {
-	re := regexp.MustCompile("x[0-9a-f]{10}")
+	re := regexp.MustCompile("x[0-9a-f]{10,}/")
 	var buf bytes.Buffer
 	io.Copy(&buf, r)
-	return bytes.NewReader(re.ReplaceAll(buf.Bytes(), []byte("xXXXXXXXXXX")))
+	return bytes.NewReader(re.ReplaceAll(buf.Bytes(), []byte("xXXXXXXXXXX/")))
 }
 
 func Example_upload() {
