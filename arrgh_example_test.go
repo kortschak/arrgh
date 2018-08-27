@@ -88,7 +88,7 @@ func Example_upload() {
 
 	io.Copy(os.Stdout, mask(resp.Body))
 
-	// Output:
+	// Unordered output:
 	//
 	// /ocpu/tmp/xXXXXXXXXXX/R/read.csv
 	// /ocpu/tmp/xXXXXXXXXXX/R/.val
