@@ -1,6 +1,6 @@
 arrgh (Pronunciation: /ɑː/ or /är/) is an interface to the [OpenCPU](https://www.opencpu.org/) R server system.
 
-[![Build Status](https://travis-ci.org/kortschak/arrgh.svg?branch=master)](https://travis-ci.org/kortschak/arrgh) [![Coverage Status](https://coveralls.io/repos/kortschak/arrgh/badge.svg?branch=master&service=github)](https://coveralls.io/github/kortschak/arrgh?branch=master) [![GoDoc](https://godoc.org/github.com/kortschak/arrgh?status.svg)](https://godoc.org/github.com/kortschak/arrgh) [![DOI](http://joss.theoj.org/papers/10.21105/joss.00517/status.svg)](https://doi.org/10.21105/joss.00517)
+[![Build Status](https://travis-ci.com/kortschak/arrgh.svg?branch=master)](https://travis-ci.com/kortschak/arrgh) [![Coverage Status](https://coveralls.io/repos/kortschak/arrgh/badge.svg?branch=master&service=github)](https://coveralls.io/github/kortschak/arrgh?branch=master) [![GoDoc](https://godoc.org/github.com/kortschak/arrgh?status.svg)](https://godoc.org/github.com/kortschak/arrgh) [![DOI](http://joss.theoj.org/papers/10.21105/joss.00517/status.svg)](https://doi.org/10.21105/joss.00517)
 
 ## Overview
 
